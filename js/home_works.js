@@ -20,7 +20,7 @@ let arr = 0
 
 const changeBlock = () => {
   arr++;
-  childBlock.style.left = arr + "px";
+  childBlock.style.left = `${arr}px`;
   if(arr<449){
     requestAnimationFrame(changeBlock)
   }
