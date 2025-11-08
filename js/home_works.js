@@ -274,33 +274,3 @@ counter = setTimeout(() => {
 }, 10000);
 
 
-
-
-// function openModal() {
-//   modal.style.display = 'flex';
-// }
-
-// function closeModal() {
-//   modal.style.display = 'none';
-// }
-
-// closeButton.addEventListener('click', closeModal);
-
-// const modalTimerId = setTimeout(openModal, 5000);
-
-
-// function scrollHandler() {
-//   if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
-//     openModal();
-//     clearTimeout(modalTimerId);
-//     window.removeEventListener('scroll', scrollHandler);
-//   }
-// }
-
-// window.addEventListener('scroll', scrollHandler);
-
-
-// //////////
-
-// setTimeout(openModal, 10000);
-
