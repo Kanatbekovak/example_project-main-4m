@@ -109,53 +109,53 @@ buttonStop.addEventListener("click", () => {
 //////////////dz3
 
 
-const characters = [
-  {
-    name: 'Alina',
-    age: 16,
-    image: "https://cdn-icons-png.flaticon.com/256/11565/11565158.png",
-  },
-  {
-    name: 'Bruno',
-    age: 26,
-    image:"https://cdn-icons-png.flaticon.com/256/11565/11565162.png",
-  },
-  {
-    name: 'Kaniet',
-    age: 18,
-    // image:"https://cdn-icons-png.flaticon.com/256/11565/11565146.png",
-  },
-  {
-    name: 'Lina',
-    age: 50,
-    image:"https://cdn-icons-png.flaticon.com/256/11565/11565108.png",
-  },
-  {
-    name: 'Milana',
-    age: 6,
-    image:"https://cdn-icons-png.flaticon.com/256/11565/11565114.png",
-  },
-  {
-    name: 'Rustam',
-    age: 41,
-    image:"https://cdn-icons-png.flaticon.com/256/11565/11565136.png",
-  },
-  {
-    name: 'Nuraman',
-    age: 13,
-    image:"https://cdn-icons-png.flaticon.com/256/11565/11565113.png",
-  },
-  {
-    name: 'Tina',
-    age: 37,
-    image:"https://cdn-icons-png.flaticon.com/256/11565/11565138.png",
-  },
-  {
-    name: 'Jun',
-    age: 79,
-    image:"https://cdn-icons-png.flaticon.com/256/11565/11565143.png",
-  }
-]
+// const characters = [
+//   {
+//     name: 'Alina',
+//     age: 16,
+//     image: "https://cdn-icons-png.flaticon.com/256/11565/11565158.png",
+//   },
+//   {
+//     name: 'Bruno',
+//     age: 26,
+//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565162.png",
+//   },
+//   {
+//     name: 'Kaniet',
+//     age: 18,
+//     // image:"https://cdn-icons-png.flaticon.com/256/11565/11565146.png",
+//   },
+//   {
+//     name: 'Lina',
+//     age: 50,
+//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565108.png",
+//   },
+//   {
+//     name: 'Milana',
+//     age: 6,
+//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565114.png",
+//   },
+//   {
+//     name: 'Rustam',
+//     age: 41,
+//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565136.png",
+//   },
+//   {
+//     name: 'Nuraman',
+//     age: 13,
+//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565113.png",
+//   },
+//   {
+//     name: 'Tina',
+//     age: 37,
+//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565138.png",
+//   },
+//   {
+//     name: 'Jun',
+//     age: 79,
+//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565143.png",
+//   }
+// ]
 
 
 
@@ -164,13 +164,22 @@ const defaultImg = "https://www.svgrepo.com/show/452030/avatar-default.svg"
 const charactersList = document.querySelector(".characters-list");
 
 
-fetch("characters.json")
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Ошибка загрузки JSON-файла");
-    }
-    return response.json();
-  })
+// fetch("characters.json")
+//   .then(response => {
+//     if (!response.ok) {
+//       throw new Error("Ошибка загрузки JSON-файла");
+//     }
+//     return response.json();
+//   })
+
+const request = new XMLHttpRequest();
+request.open('GET','../data/characters.json');
+request.setRequestHeader('Content-type','application/json');
+request.send();
+request.onload = () => {
+  characters = JSON.parse(request.response);
+}
+
 
 
 characters.forEach((character) => {
@@ -285,8 +294,6 @@ counter = setTimeout(() => {
 
 ///
 
-const somInput = document.querySelector("#som");
-const usdInput = document.querySelector("#usd");
 
 
 // somInput.oninput = () => {
@@ -315,23 +322,14 @@ const usdInput = document.querySelector("#usd");
 // }
 
 
-const converter = (element,secondelement) => {
-  element.oninput = () => {
-      const reguester = new XMLHttpRequest();
-      reguester.open('GET','../data/converter.json');
-      reguester.setRequestHeader('Content-type','application/json');
-      reguester.send();
-      reguester.onload = () => {
-        const response = JSON.parse(reguester.response);
-        if(element.id === 'som'){
-          secondelement.value =(somInput.value / response.usd).toFixed(2);
-        }else if(element.id === 'usd'){
-          element.value =(usdInput.value * response.usd).toFixed(2);
-        }
-        
-      }
-  }
+const requester = new XMLHttpRequest;
+requester.open('GET','../data/bio.json');
+requester.setRequestHeader('Content-type','application/json');
+requester.send();
+requester.onload =() => {
+  const response = JSON.parse(requester.response);
+  console.log(response);
 }
 
-converter(somInput,usdInput);
-converter(usdInput,somInput);
+console.log("hello");
+

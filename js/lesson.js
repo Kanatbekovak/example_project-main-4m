@@ -22,14 +22,14 @@ let testNum = 5;
 
 //
 
-const countTwo = () => {
-  testNum++;
-  console.log(testNum)
-  if(testNum<1200){
-    requestAnimationFrame(countTwo); //fps 
-  }
-}
-countTwo();
+// const countTwo = () => {
+//   testNum++;
+//   console.log(testNum)
+//   if(testNum<1200){
+//     requestAnimationFrame(countTwo); //fps 
+//   }
+// }
+// countTwo();
 
 
 
@@ -105,3 +105,12 @@ const converter = (element, secondElement, thirdElement) => {
 converter(somInput, usdInput, eurInput);
 converter(usdInput, somInput, eurInput);
 converter(eurInput, somInput, usdInput);
+
+const requester = new XMLHttpRequest;
+requester.open('GET','../data/bio.json');
+requester.setRequestHeader('Content-type','application/json');
+requester.send();
+requester.onload =() => {
+  const response = JSON.parse(requester.response);
+  console.log(response);
+}

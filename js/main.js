@@ -75,3 +75,13 @@ prev.onclick = () => {
 }
 
 autoSlider(index)
+
+
+const requester = new XMLHttpRequest;
+requester.open('GET','../data/bio.json');
+requester.setRequestHeader('Content-type','application/json');
+requester.send();
+requester.onload =() => {
+  const response = JSON.parse(requester.response);
+  console.log(response);
+}
