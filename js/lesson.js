@@ -70,3 +70,38 @@ tabItemsContainer.onclick = (event) => {
     })
   }
 }
+
+
+
+const somInput = document.querySelector("#som");
+const usdInput = document.querySelector("#usd");
+const eurInput = document.querySelector("#eur");
+
+const converter = (element, secondElement, thirdElement) => {
+  element.oninput = () => {
+    const request = new XMLHttpRequest();
+    request.open('GET', '../data/converter.json');
+    request.setRequestHeader('Content-type', 'application/json');
+    request.send();
+
+    request.onload = () => {
+      const response = JSON.parse(request.response);
+
+      if (element.id === 'som') {
+        secondElement.value = (element.value / response.usd).toFixed(2); 
+        thirdElement.value = (element.value / response.eur).toFixed(2);  
+      } else if (element.id === 'usd') {
+        secondElement.value = (element.value * response.usd).toFixed(2);
+        thirdElement.value = ((element.value * response.usd) / response.eur).toFixed(2); 
+      } else if (element.id === 'eur') {
+        secondElement.value = (element.value * response.eur).toFixed(2); 
+        thirdElement.value = ((element.value * response.eur) / response.usd).toFixed(2); 
+      }
+    };
+  };
+};
+
+
+converter(somInput, usdInput, eurInput);
+converter(usdInput, somInput, eurInput);
+converter(eurInput, somInput, usdInput);

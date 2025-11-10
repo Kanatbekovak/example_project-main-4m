@@ -161,8 +161,17 @@ const characters = [
 
 const defaultImg = "https://www.svgrepo.com/show/452030/avatar-default.svg"
 
-
 const charactersList = document.querySelector(".characters-list");
+
+
+fetch("characters.json")
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Ошибка загрузки JSON-файла");
+    }
+    return response.json();
+  })
+
 
 characters.forEach((character) => {
   const characterCard = document.createElement("div");
@@ -274,3 +283,55 @@ counter = setTimeout(() => {
 }, 10000);
 
 
+///
+
+const somInput = document.querySelector("#som");
+const usdInput = document.querySelector("#usd");
+
+
+// somInput.oninput = () => {
+//   const reguester = new XMLDocument();
+//   reguester.open('GET','../data/convertor.json');
+//   reguester.setRequestHeader('Content-type','application/json');
+//   reguester.send()
+//   reguester.onload = () => {
+//     const response = JSON.parse(reguester.response);
+//     console.log(response);
+//     usdInput.value =(somInput.value * response.usd).toFixed(2)
+//   }
+// }
+
+
+// usdInput.oninput = () => {
+//   const reguester = new XMLDocument();
+//   reguester.open('GET','../data/convertor.json');
+//   reguester.setRequestHeader('Content-type','application/json');
+//   reguester.send()
+//   reguester.onload = () => {
+//     const response = JSON.parse(reguester.response);
+//     console.log(response);
+//     somInput.value =(usdInput.value * response.usd).toFixed(2)
+//   }
+// }
+
+
+const converter = (element,secondelement) => {
+  element.oninput = () => {
+      const reguester = new XMLHttpRequest();
+      reguester.open('GET','../data/converter.json');
+      reguester.setRequestHeader('Content-type','application/json');
+      reguester.send();
+      reguester.onload = () => {
+        const response = JSON.parse(reguester.response);
+        if(element.id === 'som'){
+          secondelement.value =(somInput.value / response.usd).toFixed(2);
+        }else if(element.id === 'usd'){
+          element.value =(usdInput.value * response.usd).toFixed(2);
+        }
+        
+      }
+  }
+}
+
+converter(somInput,usdInput);
+converter(usdInput,somInput);
