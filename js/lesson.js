@@ -106,11 +106,107 @@ converter(somInput, usdInput, eurInput);
 converter(usdInput, somInput, eurInput);
 converter(eurInput, somInput, usdInput);
 
-const requester = new XMLHttpRequest;
-requester.open('GET','../data/bio.json');
-requester.setRequestHeader('Content-type','application/json');
-requester.send();
-requester.onload =() => {
-  const response = JSON.parse(requester.response);
-  console.log(response);
+
+
+
+
+//promise - pending | fulfilled |rejected
+
+// const promise = new Promise((resolve,rejected) => {
+//   // throw new Error('error');
+//   setTimeout(() => {
+//     const user = {
+//       name: "nignt",
+//       desc: "moon is beautiful"
+//     }
+//     logger(user);
+//     resolve();
+//     // rejected();
+//   },1300)
+// }).then(() => {
+//   // console.log(fulfilled); //выполнилось
+//   return new Promise(() => {
+//     setTimeout(() => {
+//       const fruit = {
+//         name: "mango",
+//         desc: "delicious"
+//       }
+//       logger(fruit);
+//       resolve()
+//     },1300)
+//   })
+// }, () => {
+//   console.log(rejected);//не выполнилось
+// }).then(()=> {
+//   console.log(success);
+  
+// }, () => {
+//   console.log(error);
+  
+// })
+
+
+// const btnPrev = document.querySelector("#btn-prev");
+// const btnNext = document.querySelector("#btn-next");
+// const card = document.querySelector(".card");
+
+// let todoID = 1;
+
+// btnNext.onclick = () => {
+//   todoID++;
+//   fetch(`https://jsonplaceholder.typicode.com/todos/${todoID}`)
+//     .then(response => response.json())
+//     .then(data => {
+//       console.log(data);
+      
+//       card.innerHTML = `
+//         <p>${data.id}</p>
+//         <p>${data.title}</p>
+//         <p>${data.completed}</p>
+//       `;
+//     });
+// };
+
+const btnPrev = document.querySelector("#btn-prev");
+const btnNext = document.querySelector("#btn-next");
+const card = document.querySelector(".card");
+
+let todoID = 1;
+
+const Todo = (id) => {
+  fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      
+      card.innerHTML = `
+        <p>${data.id}</p>
+        <p>${data.title}</p>
+        <p>${data.completed}</p>
+      `;
+    });
 }
+
+
+btnNext.onclick = () => {
+  todoID++;
+  if (todoID > 200) todoID = 1;
+  Todo(todoID);
+};
+
+btnPrev.onclick = () => {
+  todoID--;
+  if (todoID < 1) todoID = 200;
+  Todo(todoID);
+};
+
+Todo(todoID);
+
+
+fetch(`https://jsonplaceholder.typicode.com/posts`)
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    console.log(data);
+  });
