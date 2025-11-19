@@ -7,7 +7,7 @@ const buttonStop = document.getElementById("stop");
 const buttonReset = document.getElementById("reset");
 const intervalSecond = document.getElementById("seconds");
 
-
+// Gmail validation
 const regExpGmail = /[a-z0-9.]+@(gmail|mail|icloud|yahoo)\.com/i;
 
 gmailButton.onclick = () => {
@@ -20,9 +20,7 @@ gmailButton.onclick = () => {
   }
 };
 
-//dz1 
-
-
+// dz1 - Block movement
 let arr = 0;
 
 function changeBlockleft() {
@@ -37,7 +35,6 @@ function changeBlockleft() {
   }, 10);
 }
 
-
 function changeBlockbottom() {
   const change = setInterval(() => {
     arr++;
@@ -49,7 +46,6 @@ function changeBlockbottom() {
     }
   }, 10);
 }
-
 
 function changeBlockright() {
   const change = setInterval(() => {
@@ -63,7 +59,6 @@ function changeBlockright() {
   }, 10);
 }
 
-
 function changeBlocktop() {
   const change = setInterval(() => {
     arr--;
@@ -76,132 +71,80 @@ function changeBlocktop() {
   }, 10);
 }
 
-
 changeBlockleft();
 
-
-//dz2
-
+// dz2 - Timer
 let intervalid = null;
 
 buttonStart.addEventListener("click", () => {
   if(intervalid) return;
   intervalid = setInterval(() => {
-    let value = Number (intervalSecond.innerText);
+    let value = Number(intervalSecond.innerText);
     value++;
     intervalSecond.innerText = value;
-  },5)
-})
+  }, 5);
+});
 
 buttonReset.addEventListener("click", () => {
   clearInterval(intervalid);
   intervalid = null;
-  intervalSecond.innerText = "0"
-  },5)
-
+  intervalSecond.innerText = "0";
+});
 
 buttonStop.addEventListener("click", () => {
   clearInterval(intervalid);
   intervalid = null;
-})
-
-
-//////////////dz3
-
-
-// const characters = [
-//   {
-//     name: 'Alina',
-//     age: 16,
-//     image: "https://cdn-icons-png.flaticon.com/256/11565/11565158.png",
-//   },
-//   {
-//     name: 'Bruno',
-//     age: 26,
-//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565162.png",
-//   },
-//   {
-//     name: 'Kaniet',
-//     age: 18,
-//     // image:"https://cdn-icons-png.flaticon.com/256/11565/11565146.png",
-//   },
-//   {
-//     name: 'Lina',
-//     age: 50,
-//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565108.png",
-//   },
-//   {
-//     name: 'Milana',
-//     age: 6,
-//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565114.png",
-//   },
-//   {
-//     name: 'Rustam',
-//     age: 41,
-//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565136.png",
-//   },
-//   {
-//     name: 'Nuraman',
-//     age: 13,
-//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565113.png",
-//   },
-//   {
-//     name: 'Tina',
-//     age: 37,
-//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565138.png",
-//   },
-//   {
-//     name: 'Jun',
-//     age: 79,
-//     image:"https://cdn-icons-png.flaticon.com/256/11565/11565143.png",
-//   }
-// ]
-
-
-
-const defaultImg = "https://www.svgrepo.com/show/452030/avatar-default.svg"
-
-const charactersList = document.querySelector(".characters-list");
-
-
-// fetch("characters.json")
-//   .then(response => {
-//     if (!response.ok) {
-//       throw new Error("Ошибка загрузки JSON-файла");
-//     }
-//     return response.json();
-//   })
-
-const request = new XMLHttpRequest();
-request.open('GET','../data/characters.json');
-request.setRequestHeader('Content-type','application/json');
-request.send();
-request.onload = () => {
-  characters = JSON.parse(request.response);
-}
-
-
-
-characters.forEach((character) => {
-  const characterCard = document.createElement("div");
-  characterCard.setAttribute("class", "character-card");
-
-  characterCard.innerHTML = `
-    <div class="character-photo">
-      <img src="${character.image ?? defaultImg}" alt="${character.name}">
-    </div>
-    <p><strong>${character.name}</strong></p>
-    <p>Age: ${character.age}</p>
-  `;
-
-  charactersList.appendChild(characterCard);
 });
 
+// dz3 - Characters with fetch and async/await
+const defaultImg = "https://www.svgrepo.com/show/452030/avatar-default.svg";
+const charactersList = document.querySelector(".characters-list");
 
+// Функция для загрузки персонажей с использованием fetch и async/await
+async function loadCharacters() {
+  try {
+    const response = await fetch('../data/characters.json');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const characters = await response.json();
+    renderCharacters(characters);
+    added();
+    
+  } catch (error) {
+    console.error('Error loading characters:', error);
+    charactersList.innerHTML = '<p>Error loading characters data</p>';
+  }
+}
+
+// Функция для отрисовки персонажей
+function renderCharacters(characters) {
+  charactersList.innerHTML = '';
+  
+  characters.forEach((character) => {
+    const characterCard = document.createElement("div");
+    characterCard.setAttribute("class", "character-card");
+
+    characterCard.innerHTML = `
+      <div class="character-photo">
+        <img src="${character.image ?? defaultImg}" alt="${character.name}">
+      </div>
+      <p><strong>${character.name}</strong></p>
+      <p>Age: ${character.age}</p>
+    `;
+
+    charactersList.appendChild(characterCard);
+  });
+}
+
+// Функция для карусели
 const added = () => {
   const photos = document.querySelectorAll(".character-card");
   const picture = 3;
   let index = 0;
+  
   const showPhotos = () => {
     photos.forEach(photo => photo.style.display = "none");
 
@@ -214,37 +157,34 @@ const added = () => {
       index = 0;
     }
   }
+  
   showPhotos();
-
   setInterval(showPhotos, 5000);
 };
 
-added();
+// Загружаем персонажей при загрузке страницы
+loadCharacters();
 
-
-// //////////
-
+// Modal functionality
 const modal = document.querySelector('.modal');
 const closeButton = modal.querySelector('.modal_close');
 const btnOpen = document.querySelector("#btn-get");
 
-
-openModal = () => {
-  modal.style.display= "block";
-  document.body.style.overflow = "hidden"
+const openModal = () => {
+  modal.style.display = "block";
+  document.body.style.overflow = "hidden";
 }
 
-
-closeModal = () => {
-  modal.style.display = "none"
-  document.body.style.overflow = ""
+const closeModal = () => {
+  modal.style.display = "none";
+  document.body.style.overflow = "";
 }
 
-btnOpen.addEventListener('click',() => {
+btnOpen.addEventListener('click', () => {
   openModal();
 });
 
-closeButton.addEventListener('click',() => {
+closeButton.addEventListener('click', () => {
   closeModal();
 });
 
@@ -252,7 +192,7 @@ modal.addEventListener("click", (event) => {
   if(event.target === modal) {
     closeModal();
   }
-})
+});
 
 let open = false;
 let modalBtn = false;
@@ -260,65 +200,78 @@ let scrollEnd = false;
 let counter;
 
 const scroll = () => {
-    if (!open && !modalBtn && !scrollEnd) {
-        if (window.pageYOffset > 1000) {
-            setTimeout(() => {
-                openModal()
-            }, 1000);
-        }    
-    }
+  if (!open && !modalBtn && !scrollEnd) {
+    if (window.pageYOffset > 1000) {
+      setTimeout(() => {
+        openModal();
+      }, 1000);
+    }    
+  }
 }
 
 window.addEventListener('scroll', scroll);
 
 window.addEventListener('scroll', () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight && !scrollEnd) {
-        scrollEnd = true;
-        clearTimeout(counter);
-        if (!modalBtn && !scroll) {
-            counter = setTimeout(() => {
-                openModal();
-            }, 10000);
-        }
-    } else if (!scrollEnd) {
-        clearTimeout(counter); 
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight && !scrollEnd) {
+    scrollEnd = true;
+    clearTimeout(counter);
+    if (!modalBtn && !scroll) {
+      counter = setTimeout(() => {
+        openModal();
+      }, 10000);
     }
+  } else if (!scrollEnd) {
+    clearTimeout(counter); 
+  }
 });
 
 counter = setTimeout(() => {
-    if (!modalBtn && !scrollEnd) {
-        openModal();
-    }
+  if (!modalBtn && !scrollEnd) {
+    openModal();
+  }
 }, 10000);
 
+// Converter with fetch and async/await
+const somInput = document.getElementById("som_input");
+const usdInput = document.getElementById("usd_input");
 
-///
+// Функция для загрузки курсов валют
+async function loadExchangeRates() {
+  try {
+    const response = await fetch('../data/convertor.json');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const rates = await response.json();
+    return rates;
+    
+  } catch (error) {
+    console.error('Error loading exchange rates:', error);
+    return null;
+  }
+}
 
+// Обработчики для конвертера
+somInput.oninput = async () => {
+  try {
+    const rates = await loadExchangeRates();
+    if (rates && rates.usd) {
+      usdInput.value = (somInput.value / rates.usd).toFixed(2);
+    }
+  } catch (error) {
+    console.error('Error converting currency:', error);
+  }
+};
 
-
-// somInput.oninput = () => {
-//   const reguester = new XMLDocument();
-//   reguester.open('GET','../data/convertor.json');
-//   reguester.setRequestHeader('Content-type','application/json');
-//   reguester.send()
-//   reguester.onload = () => {
-//     const response = JSON.parse(reguester.response);
-//     console.log(response);
-//     usdInput.value =(somInput.value * response.usd).toFixed(2)
-//   }
-// }
-
-
-// usdInput.oninput = () => {
-//   const reguester = new XMLDocument();
-//   reguester.open('GET','../data/convertor.json');
-//   reguester.setRequestHeader('Content-type','application/json');
-//   reguester.send()
-//   reguester.onload = () => {
-//     const response = JSON.parse(reguester.response);
-//     console.log(response);
-//     somInput.value =(usdInput.value * response.usd).toFixed(2)
-//   }
-// }
-
-
+usdInput.oninput = async () => {
+  try {
+    const rates = await loadExchangeRates();
+    if (rates && rates.usd) {
+      somInput.value = (usdInput.value * rates.usd).toFixed(2);
+    }
+  } catch (error) {
+    console.error('Error converting currency:', error);
+  }
+};

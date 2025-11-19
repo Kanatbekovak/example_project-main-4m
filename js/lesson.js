@@ -77,15 +77,32 @@ const somInput = document.querySelector("#som");
 const usdInput = document.querySelector("#usd");
 const eurInput = document.querySelector("#eur");
 
-const converter = (element, secondElement, thirdElement) => {
-  element.oninput = () => {
-    const request = new XMLHttpRequest();
-    request.open('GET', '../data/converter.json');
-    request.setRequestHeader('Content-type', 'application/json');
-    request.send();
+async function loadExchangeRates() {
+  try {
+    const response = await fetch('../data/converter.json');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const rates = await response.json();
+    return rates;
+    
+  } catch (error) {
+    console.error('Error loading exchange rates:', error);
+    return null;
+  }
+}
 
-    request.onload = () => {
-      const response = JSON.parse(request.response);
+
+const converter = (element, secondElement, thirdElement) => {
+  element.oninput = async () => {
+    try {
+      const response = await loadExchangeRates();
+      
+      if (!response) {
+        throw new Error('Failed to load exchange rates');
+      }
 
       if (element.id === 'som') {
         secondElement.value = (element.value / response.usd).toFixed(2); 
@@ -97,9 +114,13 @@ const converter = (element, secondElement, thirdElement) => {
         secondElement.value = (element.value * response.eur).toFixed(2); 
         thirdElement.value = ((element.value * response.eur) / response.usd).toFixed(2); 
       }
-    };
+    }catch (error) {
+      console.error('Error converting currency:', error);
+    }
   };
 };
+  
+
 
 
 converter(somInput, usdInput, eurInput);
@@ -202,6 +223,7 @@ btnPrev.onclick = () => {
 
 Todo(todoID);
 
+////////////////
 
 fetch(`https://jsonplaceholder.typicode.com/posts`)
   .then((response) => {
@@ -210,3 +232,33 @@ fetch(`https://jsonplaceholder.typicode.com/posts`)
   .then((data) => {
     console.log(data);
   });
+
+
+//////////
+
+const btnSearch = document.querySelector("#search");
+const searchInput = document.querySelector(".cityName");
+const cityName = document.querySelector(".city");
+const cityTemp = document.querySelector(".temp");
+
+btnSearch.onclick = () => {
+  if(searchInput.value !== ''){
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchInput.value}&units=metric&appid=dc88d36c9002fe4befa3be17fe151a61`)
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data);
+        cityName.textContent = data.name || "name city",
+        cityTemp.textContent = data.main?.temp
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        cityName.textContent = "Error fetching data";
+        cityTemp.textContent = '';
+      });
+  } else {
+    cityName.textContent = "not city"
+    cityTemp.textContent = ''
+  }
+}
+
+//dc88d36c9002fe4befa3be17fe151a61
